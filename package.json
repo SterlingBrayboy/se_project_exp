@@ -1,0 +1,14 @@
+{
+  "name": "se_project_exp",
+  "version": "0.1.0",
+  "description": "Backend for WTWR App",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sterling Brayboy",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
