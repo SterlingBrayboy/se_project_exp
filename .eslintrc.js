@@ -1,4 +1,4 @@
-const _id = "";
+// const _id = "";
 
 module.exports = {
   env: {
@@ -24,7 +24,14 @@ module.exports = {
   },
   rules: {
     "no-console": ["warn", { allow: ["error"] }],
-    "no-underscore-dangle": ["error", { allow: ["foo_", "_bar"] }],
-    // var _ = require('underscore');
+    "no-underscore-dangle": [
+      "error",
+      {
+        allow: ["_id"], // Allow _id
+        allowAfterThis: true,
+        allowAfterSuper: true,
+        enforceInMethodNames: true,
+      },
+    ],
   },
 };
