@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    minlength: 2,
+    minlength: 0,
     maxlength: 30,
   },
   avatar: {
@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
       validator(value) {
         return validator.isURL(value);
       },
-      message: "You mus enter a valid URL",
+      message: "You must enter a valid URL",
     },
   },
 });
