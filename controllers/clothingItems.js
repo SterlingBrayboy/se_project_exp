@@ -17,5 +17,5 @@ const createItem = (req, res) => {
 };
 
 module.exports = {
-  createitem,
+  createItem,
 };
