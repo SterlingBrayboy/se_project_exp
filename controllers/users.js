@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const router = require("../routes");
+// const router = require("../routes");
 
 // GET /users
 

@@ -3,7 +3,7 @@ const clothingItem = require("./clothingItem");
 
 // const userRouter = require("./users");
 
-// router.use("/users", userRouter);
+// router.use("/users", mainRouter);
 
 router.use("/items", clothingItem);
 
