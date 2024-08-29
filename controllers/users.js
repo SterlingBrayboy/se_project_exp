@@ -1,7 +1,9 @@
 const User = require("../models/user");
-import { BAD_REQUEST_CODE } from "../utils/errors";
-import { NOT_FOUND_CODE } from "../utils/errors";
-import { INTERNAL_SERVICE_ERROR_CODE } from "../utils/errors";
+const {
+  BAD_REQUEST_CODE,
+  NOT_FOUND_CODE,
+  INTERNAL_SERVICE_ERROR_CODE,
+} = require("../utils/errors");
 // const router = require("../routes");
 
 // GET /users
