@@ -18,7 +18,18 @@ app.use(routes);
 
 app.use("/", mainRouter);
 
+app.use((req, res, next) => {
+  req.user = {
+    _id: "66c826882e5d7e29a99d57bd", // paste the _id of the test user created in the previous step
+  };
+  next();
+});
+
 app.listen(PORT, () => {
   console.log(`Server is runnning on port ${PORT}`);
   console.log("This is working");
 });
+
+module.exports.createClothingItem = (req, res) => {
+  console.log(req.user._id); // _id will become accessible
+};
