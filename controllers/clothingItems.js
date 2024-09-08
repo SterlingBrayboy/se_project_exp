@@ -42,15 +42,43 @@ const deleteItem = (req, res) => {
   console.log(itemId);
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
-    .then((item) => res.status(204).send({}))
+    .then((item) => res.status(200).send({}))
     .catch((e) => {
       res.status(500).send({ message: "Error from deleteItem", e });
     });
 };
+
+module.exports.likeItem = (req, res) =>
+  ClothingItem.findByIdAndUpdate(
+    req.params.itemId,
+    { $addToSet: { likes: req.user._id } }, // add _id to the array if it's not there yet
+    { new: true }
+      .orFail()
+      .then((itemI) => res.status(200).send({}))
+      .catch((e) => {
+        res.status(500).send({ message: "Error from likeItem", e });
+      })
+  );
+//...
+
+module.exports.unlikeItem = (req, res) =>
+  ClothingItem.findByIdAndUpdate(
+    req.params.itemId,
+    { $pull: { likes: req.user._id } }, // remove _id from the array
+    { new: true }
+      .orFail()
+      .then((item) => res.status(204).send({}))
+      .catch((e) => {
+        res.status(500).send({ message: "Error from unlikeItem", e });
+      })
+  );
+//...
 
 module.exports = {
   createItem,
   getItems,
   updateItem,
   deleteItem,
+  likeItem,
+  unlikeItem,
 };
