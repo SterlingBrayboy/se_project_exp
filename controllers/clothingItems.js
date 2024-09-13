@@ -12,6 +12,7 @@ const createItem = (req, res) => {
       res.send({ data: item });
     })
     .catch((e) => {
+      console.error("Error:", err);
       res.status(500).send({ message: "Error from createItem", e });
     });
 };
@@ -39,41 +40,72 @@ const updateItem = (req, res) => {
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
 
-  console.log(itemId);
+  if (!mongoose.Types.ObjectId.isValid(itemId)) {
+    return res.status(400).send({ message: "Invalid ID format" });
+  }
+
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
-    .then((item) => res.status(200).send({}))
-    .catch((e) => {
-      res.status(500).send({ message: "Error from deleteItem", e });
+    .then((item) => {
+      if (!item) {
+        return res.status(404).send({ message: "Item not found" });
+      }
+      res.send({ message: "Item deleted" });
+    })
+    .catch((err) => {
+      console.error("Delete Item Error:", err); // Log the error
+      res.status(500).send({ message: "Internal server error" });
     });
 };
 
 const likeItem = (req, res) => {
-  const { userId } = req.params.itemId;
+  const { itemId } = req.params.itemId;
+
+  if (!mongoose.Types.ObjectId.isValid(itemId)) {
+    return res.status(400).send({ message: "Invalid ID format" });
+  }
+
   ClothingItem.findByIdAndUpdate(
-    userId,
+    itemId,
     { $addToSet: { likes: req.user._id } }, // add _id to the array if it's not there yet
     { new: true }
   )
     .orFail()
-    .then((item) => res.status(200).send(item))
-    .catch((e) => {
-      res.status(500).send({ message: "Error from likeItem", e });
+    .then((item) => {
+      if (!item) {
+        return res.status(404).send({ message: "Item not found" });
+      }
+      res.send(item);
+    })
+    .catch((err) => {
+      console.error("Like Item Error:", err); // Log the error
+      res.status(500).send({ message: "Internal server error" });
     });
 };
 //...
 
 const unlikeItem = (req, res) => {
-  const { userId } = req.params.itemId;
+  const { itemId } = req.params.itemId;
+
+  if (!mongoose.Types.ObjectId.isValid(itemId)) {
+    return res.status(400).send({ message: "Invalid ID format" });
+  }
+
   ClothingItem.findByIdAndUpdate(
-    userId,
+    itemId,
     { $pull: { likes: req.user._id } }, // remove _id from the array
     { new: true }
   )
     .orFail()
-    .then((item) => res.status(200).send(item))
-    .catch((e) => {
-      res.status(500).send({ message: "Error from unlikeItem", e });
+    .then((item) => {
+      if (!item) {
+        return res.status(404).send({ message: "Item not found" });
+      }
+      res.send(item);
+    })
+    .catch((err) => {
+      console.error("Unlike Item Error:", err); // Log the error
+      res.status(500).send({ message: "Internal server error" });
     });
 };
 //...

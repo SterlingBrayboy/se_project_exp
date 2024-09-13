@@ -16,7 +16,7 @@ const {
 //CRUD
 
 //Create
-router.post("/", createItem);
+router.post("/items", createItem);
 
 //Read
 
