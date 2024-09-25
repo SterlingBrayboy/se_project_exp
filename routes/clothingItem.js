@@ -27,10 +27,10 @@ router.get("/", getItems);
 router.put("/:itemId", updateItem);
 
 //Like
-router.put("/items/:itemId/likes", likeItem);
+router.put(":itemId/likes", likeItem);
 
 //Unlike
-router.delete("/items/:itemId/likes", unlikeItem);
+router.delete(":itemId/likes", unlikeItem);
 
 //Delete
 router.delete("/:itemId", deleteItem);
