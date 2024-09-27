@@ -2,19 +2,16 @@ const ClothingItem = require("../models/clothingItem");
 const mongoose = require("mongoose");
 
 const createItem = (req, res) => {
-  console.log(req);
-  console.log(req.body);
-
   const { name, weather, imageUrl } = req.body;
 
   ClothingItem.create({ name, weather, imageUrl })
     .then((item) => {
       console.log(item);
-      res.send({ data: item });
+      res.status(201).send({ item });
     })
-    .catch((e) => {
+    .catch((err) => {
       console.error("Error:", err);
-      res.status(500).send({ message: "Error from createItem", e });
+      res.status(400).send({ message: "Error from createItem", err });
     });
 };
 
