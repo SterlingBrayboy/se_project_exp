@@ -6,11 +6,27 @@ const app = express();
 const { PORT = 3001 } = process.env;
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/wtwr_db")
+  .connect("mongodb://127.0.0.1:27017/wtwr_db", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     console.log("Connected to DB");
   })
-  .catch(console.error);
+  .catch((error) => {
+    console.error("Error connecting to the database", error);
+  });
+
+// POST route to create a new item
+app.post("/items", (req, res) => {
+  const { name, weather, imageUrl } = req.body;
+  ClothingItem.create({ name, weather, imageUrl })
+    .then((item) => res.status(201).send({ data: item }))
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send({ message: "An error occurred" });
+    });
+});
 
 const routes = require("./routes");
 app.use(express.json());
