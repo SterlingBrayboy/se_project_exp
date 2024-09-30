@@ -37,6 +37,7 @@ const updateItem = (req, res) => {
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
+  console.log(`deleteItem called with itemId: ${itemId}`);
 
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
     return res.status(400).send({ message: "Invalid ID format" });
@@ -46,9 +47,10 @@ const deleteItem = (req, res) => {
     .orFail()
     .then((item) => {
       if (!item) {
+        console.log("No item found with given ID");
         return res.status(404).send({ message: "Item not found" });
       }
-      res.send({ message: "Item deleted" });
+      res.status(200).send({ message: "Item deleted" });
     })
     .catch((err) => {
       console.error("Delete Item Error:", err); // Log the error
@@ -57,7 +59,8 @@ const deleteItem = (req, res) => {
 };
 
 const likeItem = (req, res) => {
-  const { itemId } = req.params.itemId;
+  const { itemId } = req.params;
+  console.log(`likeItem called with itemId: ${itemId}`);
 
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
     return res.status(400).send({ message: "Invalid ID format" });
@@ -68,12 +71,12 @@ const likeItem = (req, res) => {
     { $addToSet: { likes: req.user._id } }, // add _id to the array if it's not there yet
     { new: true }
   )
-    .orFail()
     .then((item) => {
       if (!item) {
+        console.log("No item found with given ID");
         return res.status(404).send({ message: "Item not found" });
       }
-      res.send(item);
+      res.status(200).send({ data: item });
     })
     .catch((err) => {
       console.error("Like Item Error:", err); // Log the error
