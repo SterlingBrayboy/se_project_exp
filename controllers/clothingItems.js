@@ -1,5 +1,5 @@
-const ClothingItem = require("../models/clothingItem");
 const mongoose = require("mongoose");
+const ClothingItem = require("../models/clothingItem");
 
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;

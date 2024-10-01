@@ -1,6 +1,7 @@
-const router = require("express").Router();
+// const router = require("express").Router();
+const express = require("express");
 
-// const { likeItem, unlikeItem } = require("../controllers/clothingItems");
+const router = express.Router();
 
 const {
   createItem,

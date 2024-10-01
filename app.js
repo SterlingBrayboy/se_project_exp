@@ -1,22 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const routes = require("./routes/clothingItem");
 const mainRouter = require("./routes/index");
 
 const app = express();
-const { PORT = 3001 } = process.env;
-
-mongoose
-  .connect("mongodb://127.0.0.1:27017/wtwr_db")
-  .then(() => {
-    console.log("Connected to DB");
-  })
-  .catch((error) => {
-    console.error("Error connecting to the database", error);
-  });
-
-const routes = require("./routes");
 app.use(express.json());
-app.use(routes);
+const { PORT = 3001 } = process.env;
 
 app.use((req, res, next) => {
   req.user = {
@@ -25,12 +14,20 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/items", routes);
 app.use("/", mainRouter);
 
-app.listen(PORT, () => {
-  console.log(`Server is runnning on port ${PORT}`);
-  console.log("This is working");
-});
+mongoose
+  .connect("mongodb://127.0.0.1:27017/wtwr_db")
+  .then(() => {
+    console.log("Connected to DB");
+    app.listen(PORT, () => {
+      console.log(`App is listening at port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Error connecting to the database", error);
+  });
 
 module.exports.createClothingItem = (req, res) => {
   console.log(req.user._id); // _id will become accessible
