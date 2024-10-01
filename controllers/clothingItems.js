@@ -30,8 +30,8 @@ const updateItem = (req, res) => {
   ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
     .orFail()
     .then((item) => res.status(200).send({ data: item }))
-    .catch((e) => {
-      res.status(500).send({ message: "Error from updateItem", e });
+    .catch((err) => {
+      res.status(500).send({ message: "Error from updateItem", err });
     });
 };
 
@@ -86,7 +86,7 @@ const likeItem = (req, res) => {
 //...
 
 const unlikeItem = (req, res) => {
-  const { itemId } = req.params.itemId;
+  const { itemId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
     return res.status(400).send({ message: "Invalid ID format" });
@@ -102,7 +102,7 @@ const unlikeItem = (req, res) => {
       if (!item) {
         return res.status(404).send({ message: "Item not found" });
       }
-      res.send(item);
+      res.status(200).send({ data: item });
     })
     .catch((err) => {
       console.error("Unlike Item Error:", err); // Log the error

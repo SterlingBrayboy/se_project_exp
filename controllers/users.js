@@ -4,7 +4,6 @@ const {
   NOT_FOUND_CODE,
   INTERNAL_SERVICE_ERROR_CODE,
 } = require("../utils/errors");
-// const router = require("../routes");
 
 // GET /users
 
@@ -41,7 +40,7 @@ const getUser = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError" || err.name === "CastError") {
-        return res.status(NOT_FOUND_CODE).send({ message: "User not found" });
+        return res.status(BAD_REQUEST_CODE).send({ message: "User not found" });
       }
       return res
         .status(INTERNAL_SERVICE_ERROR_CODE)
