@@ -52,10 +52,10 @@ const deleteItem = (req, res) => {
   console.log(`deleteItem called with itemId: ${itemId}`);
 
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
-    res.status(BAD_REQUEST_CODE).send({ message: "Invalid ID format" });
+    return res.status(BAD_REQUEST_CODE).send({ message: "Invalid ID format" });
   }
 
-  ClothingItem.findByIdAndDelete(itemId)
+  return ClothingItem.findByIdAndDelete(itemId)
     .orFail(() => {
       const error = new Error("Card ID not found");
       error.statusCode = NOT_FOUND_CODE;
