@@ -134,12 +134,10 @@ const unlikeItem = (req, res) => {
     .catch((err) => {
       if (err.name === "CastError") {
         // 400 — invalid data passed to the methods
-        return res
-          .status(BAD_REQUEST_CODE)
-          .send({ message: "Invalid item ID" });
+        res.status(BAD_REQUEST_CODE).send({ message: "Invalid item ID" });
       } else if (err.statusCode === NOT_FOUND_CODE) {
         // 404 — the requested ID or URL doesn't exist
-        return res.status(NOT_FOUND_CODE).send({ message: err.message });
+        res.status(NOT_FOUND_CODE).send({ message: err.message });
       }
     });
 };
