@@ -71,11 +71,9 @@ const deleteItem = (req, res) => {
     .catch((err) => {
       if (err.name === "CastError") {
         // 400 — invalid data passed to the methods
-
         res.status(BAD_REQUEST_CODE).send({ message: "Invalid item ID" });
       } else if (err.statusCode === NOT_FOUND_CODE) {
         // 404 — the requested ID or URL doesn't exist
-
         res.status(NOT_FOUND_CODE).send({ message: err.message });
       }
     });
@@ -135,11 +133,9 @@ const unlikeItem = (req, res) => {
     .catch((err) => {
       if (err.name === "CastError") {
         // 400 — invalid data passed to the methods
-
         res.status(BAD_REQUEST_CODE).send({ message: "Invalid item ID" });
       } else if (err.statusCode === NOT_FOUND_CODE) {
         // 404 — the requested ID or URL doesn't exist
-
         res.status(NOT_FOUND_CODE).send({ message: err.message });
       }
     });
