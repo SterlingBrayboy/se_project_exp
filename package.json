@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint .",
-    "dev": "nodemon ./bin/www"
+    "dev": "nodemon ./bin/www",
+    "start": "node app.js"
   },
   "author": "Sterling Brayboy",
   "license": "ISC",
