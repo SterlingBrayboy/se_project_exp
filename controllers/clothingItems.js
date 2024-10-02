@@ -83,7 +83,7 @@ const likeItem = (req, res) => {
   console.log(`likeItem called with itemId: ${itemId}`);
 
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
-    res.status(BAD_REQUEST_CODE).send({ message: "Invalid ID format" });
+    return res.status(BAD_REQUEST_CODE).send({ message: "Invalid ID format" });
   }
 
   ClothingItem.findByIdAndUpdate(
@@ -110,7 +110,7 @@ const unlikeItem = (req, res) => {
   const { itemId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
-    res.status(BAD_REQUEST_CODE).send({ message: "Invalid ID format" });
+    return res.status(BAD_REQUEST_CODE).send({ message: "Invalid ID format" });
   }
 
   ClothingItem.findByIdAndUpdate(
