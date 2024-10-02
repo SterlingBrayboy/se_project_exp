@@ -49,31 +49,23 @@ const updateItem = (req, res) => {
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
-  console.log(`deleteItem called with itemId: ${itemId}`);
 
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
-    res.status(BAD_REQUEST_CODE).send({ message: "Invalid ID format" });
+    return res.status(400).json({ message: "Invalid ID format" });
   }
 
   ClothingItem.findByIdAndDelete(itemId)
     .orFail(() => {
       const error = new Error("Card ID not found");
-      error.statusCode = NOT_FOUND_CODE;
+      error.statusCode = 404;
       throw error;
     })
-    .then((item) => {
-      if (!item) {
-        return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
-      }
-      return res.status(200).send({ message: "Item deleted" });
-    })
-    .catch((err) => {
-      if (err.name === "CastError") {
-        // 400 — invalid data passed to the methods
-        res.status(BAD_REQUEST_CODE).send({ message: "Invalid item ID" });
-      } else if (err.statusCode === NOT_FOUND_CODE) {
-        // 404 — the requested ID or URL doesn't exist
-        res.status(NOT_FOUND_CODE).send({ message: err.message });
+    .then(() => res.status(200).json({ message: "Item deleted successfully" }))
+    .catch((error) => {
+      if (error.statusCode) {
+        res.status(error.statusCode).json({ message: error.message });
+      } else {
+        res.status(500).json({ message: "An error occurred on the server" });
       }
     });
 };
