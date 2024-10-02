@@ -63,18 +63,19 @@ const deleteItem = (req, res) => {
     })
     .then((item) => {
       if (!item) {
-        console.log("No item found with given ID");
         return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
       }
-      res.status(200).send({ message: "Item deleted" });
+      return res.status(200).send({ message: "Item deleted" });
     })
     .catch((err) => {
       if (err.name === "CastError") {
         // 400 — invalid data passed to the methods
-        res.status(BAD_REQUEST_CODE).send({ message: "Invalid item ID" });
+        return res
+          .status(BAD_REQUEST_CODE)
+          .send({ message: "Invalid item ID" });
       } else if (err.statusCode === NOT_FOUND_CODE) {
         // 404 — the requested ID or URL doesn't exist
-        res.status(NOT_FOUND_CODE).send({ message: err.message });
+        return res.status(NOT_FOUND_CODE).send({ message: err.message });
       }
     });
 };
