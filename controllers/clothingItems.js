@@ -98,7 +98,7 @@ const likeItem = (req, res) => {
         console.log("No item found with given ID");
         return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
       }
-      res.status(200).send({ data: item });
+      return res.status(200).send({ data: item });
     })
     .catch((err) => {
       console.error("Like Item Error:", err); // Log the error
