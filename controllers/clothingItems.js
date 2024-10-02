@@ -52,7 +52,7 @@ const deleteItem = (req, res) => {
   console.log(`deleteItem called with itemId: ${itemId}`);
 
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
-    res.status(BAD_REQUEST_CODE).send({ message: "Invalid ID format" });
+    res.status(BAD_REQUEST_CODE).json({ message: "Invalid ID format" });
   }
 
   ClothingItem.findByIdAndDelete(itemId)
