@@ -61,19 +61,16 @@ const deleteItem = (req, res) => {
       error.statusCode = NOT_FOUND_CODE;
       throw error;
     })
-    .then((item) => {
-      if (!item) {
-        return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
-      }
-      return res.status(200).send({ message: "Item deleted" });
-    })
-    .catch((err) => {
-      if (err.name === "CastError") {
-        // 400 — invalid data passed to the methods
-        res.status(BAD_REQUEST_CODE).send({ message: "Invalid item ID" });
-      } else if (err.statusCode === NOT_FOUND_CODE) {
-        // 404 — the requested ID or URL doesn't exist
-        res.status(NOT_FOUND_CODE).send({ message: err.message });
+    .then(() => res.status(200).json({ message: "Item deleted successfully" }))
+    .catch((error) => {
+      if (error instanceof mongoose.Error.CastError) {
+        res.status(BAD_REQUEST_CODE).json({ message: "Invalid ID format" });
+      } else if (error.statusCode) {
+        res.status(error.statusCode).json({ message: error.message });
+      } else {
+        res
+          .status(INTERNAL_SERVICE_ERROR_CODE)
+          .json({ message: "An error occurred on the server" });
       }
     });
 };
