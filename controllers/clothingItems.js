@@ -86,7 +86,7 @@ const likeItem = (req, res) => {
     return res.status(BAD_REQUEST_CODE).send({ message: "Invalid ID format" });
   }
 
-  ClothingItem.findByIdAndUpdate(
+  return ClothingItem.findByIdAndUpdate(
     itemId,
     { $addToSet: { likes: req.user._id } }, // add _id to the array if it's not there yet
     { new: true }
@@ -113,7 +113,7 @@ const unlikeItem = (req, res) => {
     return res.status(BAD_REQUEST_CODE).send({ message: "Invalid ID format" });
   }
 
-  ClothingItem.findByIdAndUpdate(
+  return ClothingItem.findByIdAndUpdate(
     itemId,
     { $pull: { likes: req.user._id } }, // remove _id from the array
     { new: true }
