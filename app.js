@@ -7,7 +7,8 @@ const app = express();
 app.use(express.json());
 const { PORT = 3001 } = process.env;
 
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
+  // eslint-disable-next-line no-unused-vars
   req.user = {
     _id: "66c826882e5d7e29a99d57bd", // paste the _id of the test user created in the previous step
   };
@@ -29,6 +30,7 @@ mongoose
     console.error("Error connecting to the database", error);
   });
 
-module.exports.createClothingItem = (req, res) => {
+module.exports.createClothingItem = (req, _res) => {
+  // eslint-disable-next-line no-unused-vars
   console.log(req.user._id); // _id will become accessible
 };
