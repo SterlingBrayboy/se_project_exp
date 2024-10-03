@@ -10,26 +10,28 @@ const {
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
 
-  ClothingItem.create({ name, weather, imageUrl })
+  ClothingItem.create({ name, weather, imageUrl, owner })
     .then((item) => {
       console.log(item);
       res.status(201).send({ item });
     })
     .catch((err) => {
-      console.error("Error:", err);
-      res
-        .status(BAD_REQUEST_CODE)
-        .send({ message: "Error from createItem", err });
+      console.error("Error");
+      if (err.name === "ValidationError") {
+        return res
+          .status(BAD_REQUEST_CODE)
+          .send({ message: "Error from createItem" });
+      }
     });
 };
 
 const getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.status(200).send(items))
-    .catch((e) => {
+    .catch(() => {
       res
         .status(INTERNAL_SERVICE_ERROR_CODE)
-        .send({ message: "Error from getItems", e });
+        .send({ message: "Error from getItems" });
     });
 };
 
@@ -40,15 +42,16 @@ const updateItem = (req, res) => {
   ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
     .orFail()
     .then((item) => res.status(200).send({ data: item }))
-    .catch((err) => {
+    .catch(() => {
       res
         .status(INTERNAL_SERVICE_ERROR_CODE)
-        .send({ message: "Error from updateItem", err });
+        .send({ message: "Error from updateItem" });
     });
 };
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
+
   console.log(`deleteItem called with itemId: ${itemId}`);
 
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
@@ -62,10 +65,10 @@ const deleteItem = (req, res) => {
       throw error;
     })
     .then((item) => {
-      if (!item) {
-        return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
-      }
-      return res.status(200).send({ message: "Item deleted" });
+      // if (!item) {
+      //   return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
+      // }
+      res.status(200).send({ data: item });
     })
     .catch((err) => {
       if (err.name === "CastError") {
@@ -73,7 +76,9 @@ const deleteItem = (req, res) => {
         res.status(BAD_REQUEST_CODE).send({ message: "Invalid item ID" });
       } else if (err.statusCode === NOT_FOUND_CODE) {
         // 404 — the requested ID or URL doesn't exist
-        res.status(NOT_FOUND_CODE).send({ message: err.message });
+        res
+          .status(INTERNAL_SERVICE_ERROR_CODE)
+          .send({ message: "Item not found" });
       }
     });
 };
@@ -99,7 +104,10 @@ const likeItem = (req, res) => {
       return res.status(200).send({ data: item });
     })
     .catch((err) => {
-      console.error("Like Item Error:", err); // Log the error
+      if (err.name === "CastError") {
+        return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
+      }
+      console.error("Like Item Error:"); // Log the error
       res
         .status(INTERNAL_SERVICE_ERROR_CODE)
         .send({ message: "Internal server error" });
@@ -124,10 +132,10 @@ const unlikeItem = (req, res) => {
       throw error;
     })
     .then((item) => {
-      if (!item) {
-        return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
-      }
-      return res.status(200).send({ data: item });
+      // if (!item) {
+      //   return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
+      // }
+      res.status(200).send({ data: item });
     })
     .catch((err) => {
       if (err.name === "CastError") {
@@ -135,7 +143,9 @@ const unlikeItem = (req, res) => {
         res.status(BAD_REQUEST_CODE).send({ message: "Invalid item ID" });
       } else if (err.statusCode === NOT_FOUND_CODE) {
         // 404 — the requested ID or URL doesn't exist
-        res.status(NOT_FOUND_CODE).send({ message: err.message });
+        res
+          .status(NTERNAL_SERVICE_ERROR_CODE)
+          .send({ message: "Internal Service Error" });
       }
     });
 };

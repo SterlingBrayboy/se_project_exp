@@ -31,6 +31,7 @@ mongoose
   });
 
 module.exports.createClothingItem = (req, _res) => {
+  const { owner } = req.user._id;
   // eslint-disable-next-line no-unused-vars
-  console.log(req.user._id); // _id will become accessible
+  console.log(owner); // _id will become accessible
 };
