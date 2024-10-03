@@ -8,7 +8,7 @@ const {
 } = require("../utils/errors");
 
 const createItem = (req, res) => {
-  const { name, weather, imageUrl } = req.body;
+  const { name, weather, imageUrl, owner } = req.body;
 
   return ClothingItem.create({ name, weather, imageUrl, owner })
     .then((item) => {
@@ -16,7 +16,6 @@ const createItem = (req, res) => {
       res.status(201).send({ item });
     })
     .catch((err) => {
-      console.error("Error");
       if (err.name === "ValidationError") {
         return res
           .status(BAD_REQUEST_CODE)
