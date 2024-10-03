@@ -62,7 +62,7 @@ const deleteItem = (req, res) => {
           .status(BAD_REQUEST_CODE)
           .send({ message: "Invalid item ID" });
       } else if (err.statusCode === NOT_FOUND_CODE) {
-        return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
+        res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
       }
       return res
         .status(INTERNAL_SERVICE_ERROR_CODE)
@@ -126,10 +126,11 @@ const unlikeItem = (req, res) => {
           .status(BAD_REQUEST_CODE)
           .send({ message: "Invalid item ID" });
       } else if (err.statusCode === NOT_FOUND_CODE) {
-        return res
-          .status(INTERNAL_SERVICE_ERROR_CODE)
-          .send({ message: "Internal Service Error" });
+        res.status(NOT_FOUND_CODE).send({ message: "Internal Service Error" });
       }
+      return res
+        .status(INTERNAL_SERVICE_ERROR_CODE)
+        .send({ message: "Item not found" });
     });
 };
 
