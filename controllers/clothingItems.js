@@ -50,7 +50,7 @@ const deleteItem = (req, res) => {
   return ClothingItem.findByIdAndDelete(itemId)
     .orFail(() => {
       const error = new Error("Card ID not found");
-      error.statusCode = INTERNAL_SERVICE_ERROR_CODE;
+      error.statusCode = NOT_FOUND_CODE;
       throw error;
     })
     .then((item) => {
@@ -58,9 +58,9 @@ const deleteItem = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST_CODE)
-          .send({ message: "Invalid item ID" });
+        res.status(BAD_REQUEST_CODE).send({ message: "Invalid item ID" });
+      } else if (err.statusCode === NOT_FOUND_CODE) {
+        res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
       }
     });
 };
