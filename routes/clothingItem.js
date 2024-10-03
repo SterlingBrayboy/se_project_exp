@@ -5,7 +5,6 @@ const router = express.Router();
 const {
   createItem,
   getItems,
-  // updateItem,
   deleteItem,
   likeItem,
   unlikeItem,
@@ -16,9 +15,6 @@ router.post("/", createItem);
 
 // Read
 router.get("/", getItems);
-
-// Update
-// router.put("/:itemId", updateItem);
 
 // Like
 router.put("/:itemId/likes", likeItem);

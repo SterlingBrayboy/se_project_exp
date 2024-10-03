@@ -37,20 +37,6 @@ const getItems = (req, res) => {
     });
 };
 
-// const updateItem = (req, res) => {
-//   const { itemId } = req.params;
-//   const { imageUrl } = req.body;
-
-//   ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
-//     .orFail()
-//     .then((item) => res.status(200).send({ data: item }))
-//     .catch(() => {
-//       res
-//         .status(INTERNAL_SERVICE_ERROR_CODE)
-//         .send({ message: "Error from updateItem" });
-//     });
-// };
-
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
 
@@ -144,7 +130,6 @@ const unlikeItem = (req, res) => {
 module.exports = {
   createItem,
   getItems,
-  // updateItem,
   deleteItem,
   likeItem,
   unlikeItem,
