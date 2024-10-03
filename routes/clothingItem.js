@@ -5,7 +5,7 @@ const router = express.Router();
 const {
   createItem,
   getItems,
-  updateItem,
+  // updateItem,
   deleteItem,
   likeItem,
   unlikeItem,
