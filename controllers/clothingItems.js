@@ -59,7 +59,7 @@ const deleteItem = (req, res) => {
     .catch((err) => {
       if (err.name === "CastError") {
         res.status(BAD_REQUEST_CODE).send({ message: "Invalid item ID" });
-      } else if (err.statusCode === NOT_FOUND_CODE) {
+      } else if (err.statusCode === INTERNAL_SERVICE_ERROR_CODE) {
         res
           .status(INTERNAL_SERVICE_ERROR_CODE)
           .send({ message: "Item not found" });
