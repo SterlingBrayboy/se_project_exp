@@ -50,7 +50,7 @@ const deleteItem = (req, res) => {
   return ClothingItem.findByIdAndDelete(itemId)
     .orFail(() => {
       const error = new Error("Card ID not found");
-      error.statusCode = NOT_FOUND_CODE;
+      error.statusCode = INTERNAL_SERVICE_ERROR_CODE;
       throw error;
     })
     .then((item) => {
