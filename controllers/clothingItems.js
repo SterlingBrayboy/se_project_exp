@@ -37,19 +37,19 @@ const getItems = (req, res) => {
     });
 };
 
-const updateItem = (req, res) => {
-  const { itemId } = req.params;
-  const { imageUrl } = req.body;
+// const updateItem = (req, res) => {
+//   const { itemId } = req.params;
+//   const { imageUrl } = req.body;
 
-  ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
-    .orFail()
-    .then((item) => res.status(200).send({ data: item }))
-    .catch(() => {
-      res
-        .status(INTERNAL_SERVICE_ERROR_CODE)
-        .send({ message: "Error from updateItem" });
-    });
-};
+//   ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
+//     .orFail()
+//     .then((item) => res.status(200).send({ data: item }))
+//     .catch(() => {
+//       res
+//         .status(INTERNAL_SERVICE_ERROR_CODE)
+//         .send({ message: "Error from updateItem" });
+//     });
+// };
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
@@ -67,17 +67,12 @@ const deleteItem = (req, res) => {
       throw error;
     })
     .then((item) => {
-      // if (!item) {
-      //   return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
-      // }
       res.status(200).send({ data: item });
     })
     .catch((err) => {
       if (err.name === "CastError") {
-        // 400 — invalid data passed to the methods
         res.status(BAD_REQUEST_CODE).send({ message: "Invalid item ID" });
       } else if (err.statusCode === NOT_FOUND_CODE) {
-        // 404 — the requested ID or URL doesn't exist
         res
           .status(INTERNAL_SERVICE_ERROR_CODE)
           .send({ message: "Item not found" });
@@ -109,7 +104,6 @@ const likeItem = (req, res) => {
       if (err.name === "CastError") {
         return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
       }
-      console.error("Like Item Error:"); // Log the error
       return res
         .status(INTERNAL_SERVICE_ERROR_CODE)
         .send({ message: "Internal server error" });
@@ -134,17 +128,12 @@ const unlikeItem = (req, res) => {
       throw error;
     })
     .then((item) => {
-      // if (!item) {
-      //   return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
-      // }
       res.status(200).send({ data: item });
     })
     .catch((err) => {
       if (err.name === "CastError") {
-        // 400 — invalid data passed to the methods
         res.status(BAD_REQUEST_CODE).send({ message: "Invalid item ID" });
       } else if (err.statusCode === NOT_FOUND_CODE) {
-        // 404 — the requested ID or URL doesn't exist
         res
           .status(INTERNAL_SERVICE_ERROR_CODE)
           .send({ message: "Internal Service Error" });
@@ -155,7 +144,7 @@ const unlikeItem = (req, res) => {
 module.exports = {
   createItem,
   getItems,
-  updateItem,
+  // updateItem,
   deleteItem,
   likeItem,
   unlikeItem,
