@@ -10,7 +10,7 @@ const {
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
 
-  ClothingItem.create({ name, weather, imageUrl, owner })
+  return ClothingItem.create({ name, weather, imageUrl, owner })
     .then((item) => {
       console.log(item);
       res.status(201).send({ item });
@@ -108,7 +108,7 @@ const likeItem = (req, res) => {
         return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
       }
       console.error("Like Item Error:"); // Log the error
-      res
+      return res
         .status(INTERNAL_SERVICE_ERROR_CODE)
         .send({ message: "Internal server error" });
     });
@@ -144,7 +144,7 @@ const unlikeItem = (req, res) => {
       } else if (err.statusCode === NOT_FOUND_CODE) {
         // 404 — the requested ID or URL doesn't exist
         res
-          .status(NTERNAL_SERVICE_ERROR_CODE)
+          .status(INTERNAL_SERVICE_ERROR_CODE)
           .send({ message: "Internal Service Error" });
       }
     });
