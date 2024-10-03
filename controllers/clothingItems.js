@@ -21,6 +21,9 @@ const createItem = (req, res) => {
           .status(BAD_REQUEST_CODE)
           .send({ message: "Error from createItem" });
       }
+      return res
+        .status(INTERNAL_SERVICE_ERROR_CODE)
+        .send({ message: "Internal server error" });
     });
 };
 
