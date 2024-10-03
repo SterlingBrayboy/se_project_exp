@@ -8,7 +8,8 @@ const {
 } = require("../utils/errors");
 
 const createItem = (req, res) => {
-  const { name, weather, imageUrl, owner } = req.body;
+  const { name, weather, imageUrl } = req.body;
+  const owner = req.user._id;
 
   return ClothingItem.create({ name, weather, imageUrl, owner })
     .then((item) => {
