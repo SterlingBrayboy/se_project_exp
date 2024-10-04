@@ -14,7 +14,7 @@ const getUsers = (req, res) => {
       console.error(err);
       return res
         .status(INTERNAL_SERVICE_ERROR_CODE)
-        .send({ message: err.message });
+        .send({ message: "Internal Service Error" });
     });
 };
 
@@ -30,7 +30,7 @@ const createUser = (req, res) => {
       }
       return res
         .status(INTERNAL_SERVICE_ERROR_CODE)
-        .send({ message: err.message });
+        .send({ message: "Internal Service Error" });
     });
 };
 
@@ -42,14 +42,14 @@ const getUser = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND_CODE).send({ message: "User not found" });
+        return res.status(NOT_FOUND_CODE).send({ message: "Invalid data" });
       }
       if (err.name === "CastError") {
         return res.status(BAD_REQUEST_CODE).send({ message: "User not found" });
       }
       return res
         .status(INTERNAL_SERVICE_ERROR_CODE)
-        .send({ message: err.message });
+        .send({ message: "Internal Service Error" });
     });
 };
 
