@@ -21,12 +21,16 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    // minlength: 2,
-    // maxlength: 30,
+    unique: true,
+    validate: {
+      validator: validator.isEmail,
+      message: "Must be a valid email",
+    },
   },
   password: {
-    type: [{ type: String, select: "false" }],
+    type: String,
     required: true,
+    select: false,
     validate: {
       validator(str) {
         return validator.isStrongPassword(str, {
