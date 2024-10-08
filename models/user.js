@@ -32,7 +32,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     select: false,
-    // minlength: 5,
     validate: {
       validator(str) {
         return validator.isStrongPassword(str, {
@@ -56,18 +55,20 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.statics.findUserByCredentials = function (email, password) {
-  return this.findOne({ email }).then((user) => {
-    if (!user) {
-      return Promise.reject(new Error("Incorrect email or password"));
-    }
-    // Assume you use bcrypt to check password
-    return bcrypt.compare(password, user.password).then((matched) => {
-      if (!matched) {
+  return this.findOne({ email })
+    .select("+password")
+    .then((user) => {
+      if (!user) {
         return Promise.reject(new Error("Incorrect email or password"));
       }
-      return user;
+      // Assume you use bcrypt to check password
+      return bcrypt.compare(password, user.password).then((matched) => {
+        if (!matched) {
+          return Promise.reject(new Error("Incorrect email or password"));
+        }
+        return user;
+      });
     });
-  });
 };
 
 module.exports = mongoose.model("user", userSchema);
