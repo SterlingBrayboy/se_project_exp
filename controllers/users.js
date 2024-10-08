@@ -5,7 +5,7 @@ const {
   BAD_REQUEST_CODE,
   NOT_FOUND_CODE,
   INTERNAL_SERVICE_ERROR_CODE,
-  // UNAUTHORIZED_CODE,
+  UNAUTHORIZED_CODE,
 } = require("../utils/errors");
 
 const getUsers = (req, res) => {
@@ -21,6 +21,14 @@ const getUsers = (req, res) => {
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
+  // const bcrypt = require("bcryptjs");
+
+  // bcrypt.hash(req.body.password, 10).then((hash) =>
+  //   User.create({
+  //     email: req.body.email,
+  //     password: hash,
+  //   })
+  // );
 
   User.create({ name, avatar, email, password })
     .then((user) => res.status(201).send(user))
@@ -54,33 +62,22 @@ const getUser = (req, res) => {
     });
 };
 
-// userSchema.statics.findUserByCredentials = function (email, password) {
-//   return this.findOne({ email }).then((user) => {
-//     if (!user) {
-//       return Promise.reject(new Error('Incorrect email or password'));
-//     }
-//     // Assume you use bcrypt to check password
-//     return bcrypt.compare(password, user.password).then((matched) => {
-//       if (!matched) {
-//         return Promise.reject(new Error('Incorrect email or password'));
-//       }
-//       return user;
-//     });
-//   });
-// };
+const login = (req, res) => {
+  const { email, password } = req.body;
 
-// const login = (req, res) => {
-// const { email, password } = req.body;
-//   User.findUserByCredentials(email, password)
-//     .then((user) => {
-//        const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
-//        expiresIn: "7d",
-//        res.send({ token });
-//        });
-//      .catch((err) => {
-//       console.error(err);
-//       return res.status(UNAUTHORIZED_CODE).send({ message: "Unauthorization Error"});
-//     });
-// };
+  User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+        expiresIn: "7d",
+      });
+      res.send({ token });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res
+        .status(UNAUTHORIZED_CODE)
+        .send({ message: "Unauthorization Error" });
+    });
+};
 
-module.exports = { getUsers, createUser, getUser };
+module.exports = { getUsers, createUser, getUser, login };
