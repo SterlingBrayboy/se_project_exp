@@ -1,6 +1,7 @@
-const User = require("../models/user");
 const bcrypt = require("bcryptjs");
-// const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
+// const { JWT_SECRET } = require("../utils/config");
 
 const {
   BAD_REQUEST_CODE,
@@ -33,7 +34,11 @@ const createUser = (req, res) => {
         password: hash,
       })
     )
-    .then((user) => res.status(201).json(user))
+    .then((user) => {
+      const userWithoutPassword = user.toObject();
+      delete userWithoutPassword.password;
+      res.status(201).json(userWithoutPassword);
+    })
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {
@@ -82,4 +87,15 @@ const login = (req, res) => {
     });
 };
 
-module.exports = { getUsers, createUser, getUser, login };
+// const getCurrentUser = (req, res) => {}
+
+// const updateProfile = (req, res) => {}
+
+module.exports = {
+  getUsers,
+  createUser,
+  getUser,
+  login,
+  // getCurrentUser,
+  // updateProfile,
+};

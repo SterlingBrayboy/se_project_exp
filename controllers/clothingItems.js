@@ -13,7 +13,6 @@ const createItem = (req, res) => {
 
   return ClothingItem.create({ name, weather, imageUrl, owner })
     .then((item) => {
-      console.log(item);
       res.status(201).send({ item });
     })
     .catch((err) => {
@@ -40,8 +39,6 @@ const getItems = (req, res) => {
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
-
-  console.log(`deleteItem called with itemId: ${itemId}`);
 
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
     return res.status(BAD_REQUEST_CODE).send({ message: "Invalid ID format" });
@@ -73,7 +70,6 @@ const deleteItem = (req, res) => {
 
 const likeItem = (req, res) => {
   const { itemId } = req.params;
-  console.log(`likeItem called with itemId: ${itemId}`);
 
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
     return res.status(BAD_REQUEST_CODE).send({ message: "Invalid ID format" });
@@ -86,7 +82,6 @@ const likeItem = (req, res) => {
   )
     .then((item) => {
       if (!item) {
-        console.log("No item found with given ID");
         return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
       }
       return res.status(200).send({ data: item });

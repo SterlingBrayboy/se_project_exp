@@ -5,4 +5,7 @@ const router = require("express").Router();
 // router.get("/:userId", getUser);
 // router.post("/", createUser);
 
+// router.get('/users/me', getCurrentUser);
+// router.patch('/users/me', updateProfile);
+
 module.exports = router;
