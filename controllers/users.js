@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const bcrypt = require("bcryptjs");
 // const jwt = require("jsonwebtoken");
 
 const {
@@ -21,17 +22,18 @@ const getUsers = (req, res) => {
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
-  // const bcrypt = require("bcryptjs");
 
-  // bcrypt.hash(req.body.password, 10).then((hash) =>
-  //   User.create({
-  //     email: req.body.email,
-  //     password: hash,
-  //   })
-  // );
-
-  User.create({ name, avatar, email, password })
-    .then((user) => res.status(201).send(user))
+  bcrypt
+    .hash(password, 10)
+    .then((hash) =>
+      User.create({
+        name,
+        avatar,
+        email,
+        password: hash,
+      })
+    )
+    .then((user) => res.status(201).json(user))
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {
