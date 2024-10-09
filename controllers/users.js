@@ -87,9 +87,31 @@ const login = (req, res) => {
     });
 };
 
-// const getCurrentUser = (req, res) => {}
+// const getCurrentUser = (req, res) => {};
 
-// const updateProfile = (req, res) => {}
+const updateProfile = (req, res) => {
+  const { name, avatar } = req.body;
+
+  return User.findByIdAndUpdate(
+    req.params.userId,
+    { name, avatar },
+    { new: true, runValidators: true }
+  )
+    .then((updatedUser) => {
+      if (!updatedUser) {
+        return res.status(NOT_FOUND_CODE).send({ message: "User Not Found" });
+      }
+      res.send(updatedUser);
+    })
+    .catch((err) => {
+      if (err.name === "Validation Error") {
+        res.status(BAD_REQUEST_CODE).send("Invalid data");
+      }
+      return res
+        .status(INTERNAL_SERVICE_ERROR_CODE)
+        .send({ message: "Internal Service Error" });
+    });
+};
 
 module.exports = {
   getUsers,
@@ -97,5 +119,5 @@ module.exports = {
   getUser,
   login,
   // getCurrentUser,
-  // updateProfile,
+  updateProfile,
 };
