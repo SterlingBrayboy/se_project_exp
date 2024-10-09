@@ -87,7 +87,21 @@ const login = (req, res) => {
     });
 };
 
-// const getCurrentUser = (req, res) => {};
+const getCurrentUser = (req, res) => {
+  const { userId } = req.user._id;
+
+  User.findById(userId)
+    .orFail()
+    .then((user) => res.status(200).send(user))
+    .catch((err) => {
+      if (err.name === "Cast Error") {
+        return res.status(NOT_FOUND_CODE).send({ message: "User Not Found" });
+      }
+      return res
+        .status(INTERNAL_SERVICE_ERROR_CODE)
+        .send({ message: "Internal Service Error" });
+    });
+};
 
 const updateProfile = (req, res) => {
   const { name, avatar } = req.body;
@@ -118,6 +132,6 @@ module.exports = {
   createUser,
   getUser,
   login,
-  // getCurrentUser,
+  getCurrentUser,
   updateProfile,
 };
