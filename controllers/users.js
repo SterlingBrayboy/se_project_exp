@@ -42,7 +42,7 @@ const createUser = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {
-        return res.status(BAD_REQUEST_CODE).send({ message: err.message });
+        return res.status(BAD_REQUEST_CODE).send({ message: "Invalid data" });
       }
       return res
         .status(INTERNAL_SERVICE_ERROR_CODE)
@@ -88,7 +88,7 @@ const login = (req, res) => {
 };
 
 const getCurrentUser = (req, res) => {
-  const { userId } = req.user._id;
+  const userId = req.user._id;
 
   User.findById(userId)
     .orFail()
@@ -107,7 +107,7 @@ const updateProfile = (req, res) => {
   const { name, avatar } = req.body;
 
   return User.findByIdAndUpdate(
-    req.params.userId,
+    req.user._id,
     { name, avatar },
     { new: true, runValidators: true }
   )
