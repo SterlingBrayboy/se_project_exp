@@ -7,14 +7,12 @@ const app = express();
 app.use(express.json());
 const { PORT = 3001 } = process.env;
 
-// REMOVE HARD-CODED USER OBJECT STEP 8
+// CORS
 
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: "66c826882e5d7e29a99d57bd", // paste the _id of the test user created in the previous step
-//   };
-//   next();
-// });
+const cors = require("cors");
+app.use(cors());
+
+// ROUTES
 
 app.use(routes);
 app.use("/", mainRouter);
