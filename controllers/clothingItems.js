@@ -47,13 +47,10 @@ const deleteItem = (req, res) => {
   ClothingItem.findById(itemId)
     .then((item) => {
       if (!item) {
-        return Promise.reject({
-          statusCode: NOT_FOUND_CODE,
-          message: "Item not found",
-        });
+        return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
       }
       if (!item.owner.equals(req.user._id)) {
-        return Promise.reject({ statusCode: 403, message: "Hands Off" });
+        return res.status(403).send({ message: "Hands Off" });
       }
       return ClothingItem.findByIdAndDelete(itemId);
     })
