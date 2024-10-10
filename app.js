@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const routes = require("./routes/clothingItem");
 const mainRouter = require("./routes/index");
+const { JWT_SECRET } = require("./utils/config");
+// const { auth } = require("../middlewares/auth");
 
 const app = express();
 app.use(express.json());
@@ -10,7 +12,7 @@ const { PORT = 3001 } = process.env;
 
 app.use((req, res, next) => {
   req.user = {
-    _id: "...",
+    _id: JWT_SECRET,
   };
 
   next();
