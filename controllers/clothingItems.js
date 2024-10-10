@@ -44,27 +44,30 @@ const deleteItem = (req, res) => {
     return res.status(BAD_REQUEST_CODE).send({ message: "Invalid ID format" });
   }
 
-  return ClothingItem.findByIdAndDelete(itemId)
-    .orFail(() => {
-      const error = new Error("Card ID not found");
-      error.statusCode = NOT_FOUND_CODE;
-      throw error;
-    })
+  ClothingItem.findById(itemId)
     .then((item) => {
-      res.status(200).send({ data: item });
+      if (!item) {
+        return Promise.reject({
+          statusCode: NOT_FOUND_CODE,
+          message: "Item not found",
+        });
+      }
+      if (!item.owner.equals(req.user._id)) {
+        return Promise.reject({ statusCode: 403, message: "Hands Off" });
+      }
+      return ClothingItem.findByIdAndDelete(itemId);
+    })
+    .then((deletedItem) => {
+      res.status(200).send({ data: deletedItem });
     })
     .catch((err) => {
-      if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST_CODE)
-          .send({ message: "Invalid item ID" });
+      if (err.statusCode) {
+        res.status(err.statusCode).send({ message: err.message });
+      } else {
+        res
+          .status(INTERNAL_SERVICE_ERROR_CODE)
+          .send({ message: "Internal server error" });
       }
-      if (err.statusCode === NOT_FOUND_CODE) {
-        return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
-      }
-      return res
-        .status(INTERNAL_SERVICE_ERROR_CODE)
-        .send({ message: "Internal server error" });
     });
 };
 
