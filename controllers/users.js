@@ -127,7 +127,7 @@ const updateProfile = (req, res) => {
       if (!updatedUser) {
         return res.status(NOT_FOUND_CODE).send({ message: "User Not Found" });
       }
-      res.send(updatedUser);
+      return res.send(updatedUser);
     })
     .catch((err) => {
       if (err.name === "Validation Error") {
