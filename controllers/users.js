@@ -24,16 +24,25 @@ const getUsers = (req, res) => {
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
-  bcrypt
-    .hash(password, 10)
-    .then((hash) =>
-      User.create({
-        name,
-        avatar,
-        email,
-        password: hash,
-      })
-    )
+  User.findOne({ email })
+    .then((user) => {
+      if (user) {
+        const error = new Error(
+          "The user with the provided email already exists"
+        );
+        error.name = "Duplicate Key Error";
+        throw error;
+      }
+
+      return bcrypt.hash(password, 10).then((hash) =>
+        User.create({
+          name,
+          avatar,
+          email,
+          password: hash,
+        })
+      );
+    })
     .then((user) => {
       const userWithoutPassword = user.toObject();
       delete userWithoutPassword.password;
@@ -41,6 +50,9 @@ const createUser = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
+      if (err.name === "Duplicate Key Error") {
+        return res.status(409).send({ message: "Email already exists" });
+      }
       if (err.name === "ValidationError") {
         return res.status(BAD_REQUEST_CODE).send({ message: "Invalid data" });
       }
