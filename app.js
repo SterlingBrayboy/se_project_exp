@@ -8,6 +8,14 @@ const app = express();
 app.use(express.json());
 const { PORT = 3001 } = process.env;
 
+app.use((req, res, next) => {
+  req.user = {
+    _id: "...",
+  };
+
+  next();
+});
+
 // CORS
 
 app.use(cors());
