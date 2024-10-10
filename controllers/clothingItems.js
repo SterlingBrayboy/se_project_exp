@@ -51,7 +51,7 @@ const deleteItem = (req, res) => {
       throw error;
     })
     .then((item) => {
-      return res.status(200).send({ data: item });
+      res.status(200).send({ data: item });
     })
     .catch((err) => {
       if (err.name === "CastError") {
