@@ -30,7 +30,7 @@ const createUser = (req, res) => {
         const error = new Error(
           "The user with the provided email already exists"
         );
-        error.name = "Duplicate Key Error";
+        error.statusCode = CONFLICT_CODE;
         throw error;
       }
 
@@ -50,10 +50,10 @@ const createUser = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      if (err.name === "Duplicate Key Error") {
+      if (err.statusCode === CONFLICT_CODE) {
         return res
           .status(CONFLICT_CODE)
-          .send({ message: "Duplicate Key Error" });
+          .send({ message: "The user with the provided email already exists" });
       }
       if (err.name === "ValidationError") {
         return res.status(BAD_REQUEST_CODE).send({ message: "Invalid data" });
