@@ -8,6 +8,7 @@ const {
   NOT_FOUND_CODE,
   INTERNAL_SERVICE_ERROR_CODE,
   UNAUTHORIZED_CODE,
+  CONFLICT_CODE,
 } = require("../utils/errors");
 
 const getUsers = (req, res) => {
@@ -51,7 +52,9 @@ const createUser = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "Duplicate Key Error") {
-        return res.status(409).send({ message: "Email already exists" });
+        return res
+          .status(CONFLICT_CODE)
+          .send({ message: "Email already exists" });
       }
       if (err.name === "ValidationError") {
         return res.status(BAD_REQUEST_CODE).send({ message: "Invalid data" });

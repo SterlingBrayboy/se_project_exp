@@ -5,6 +5,7 @@ const {
   BAD_REQUEST_CODE,
   NOT_FOUND_CODE,
   INTERNAL_SERVICE_ERROR_CODE,
+  FORBIDDEN_CODE,
 } = require("../utils/errors");
 
 const createItem = (req, res) => {
@@ -44,27 +45,23 @@ const deleteItem = (req, res) => {
     return res.status(BAD_REQUEST_CODE).send({ message: "Invalid ID format" });
   }
 
-  ClothingItem.findById(itemId)
+  return ClothingItem.findById(itemId)
     .then((item) => {
       if (!item) {
         return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
       }
       if (!item.owner.equals(req.user._id)) {
-        return res.status(403).send({ message: "Hands Off" });
+        return res.status(FORBIDDEN_CODE).send({ message: "Hands Off" });
       }
       return ClothingItem.findByIdAndDelete(itemId);
     })
     .then((deletedItem) => {
       res.status(200).send({ data: deletedItem });
     })
-    .catch((err) => {
-      if (err.statusCode) {
-        res.status(err.statusCode).send({ message: err.message });
-      } else {
-        res
-          .status(INTERNAL_SERVICE_ERROR_CODE)
-          .send({ message: "Internal server error" });
-      }
+    .catch(() => {
+      res
+        .status(INTERNAL_SERVICE_ERROR_CODE)
+        .send({ message: "Error from deleteItem" });
     });
 };
 
