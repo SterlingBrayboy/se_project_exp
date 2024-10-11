@@ -12,16 +12,16 @@ const {
 } = require("../controllers/clothingItems");
 
 // Create
-router.post("/", createItem);
+router.post("/", auth, createItem);
 
 // Read
 router.get("/", getItems);
 
 // Like
-router.put("/:itemId/likes", likeItem);
+router.put("/:itemId/likes", auth, likeItem);
 
 // Unlike
-router.delete("/:itemId/likes", unlikeItem);
+router.delete("/:itemId/likes", auth, unlikeItem);
 
 // Delete
 router.delete("/:itemId", auth, deleteItem);
