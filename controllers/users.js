@@ -55,7 +55,7 @@ const createUser = (req, res) => {
           .status(CONFLICT_CODE)
           .send({ message: "Duplicate Key Error" });
       }
-      if (err.name === "Validation Error") {
+      if (err.name === "ValidationError") {
         return res.status(BAD_REQUEST_CODE).send({ message: "Invalid data" });
       }
       return res
@@ -74,7 +74,7 @@ const getUser = (req, res) => {
       if (err.name === "DocumentNotFoundError") {
         return res.status(NOT_FOUND_CODE).send({ message: "Invalid data" });
       }
-      if (err.name === "Cast Error") {
+      if (err.name === "CastError") {
         return res.status(BAD_REQUEST_CODE).send({ message: "User not found" });
       }
       return res
@@ -106,7 +106,7 @@ const getCurrentUser = (req, res) => {
     .orFail()
     .then((user) => res.status(200).send(user))
     .catch((err) => {
-      if (err.name === "Cast Error") {
+      if (err.name === "CastError") {
         return res.status(NOT_FOUND_CODE).send({ message: "User Not Found" });
       }
       return res
@@ -130,7 +130,7 @@ const updateProfile = (req, res) => {
       return res.send(updatedUser);
     })
     .catch((err) => {
-      if (err.name === "Validation Error") {
+      if (err.name === "ValidationError") {
         res.status(BAD_REQUEST_CODE).send("Invalid data");
       }
       return res
