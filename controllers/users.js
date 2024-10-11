@@ -7,7 +7,6 @@ const {
   BAD_REQUEST_CODE,
   NOT_FOUND_CODE,
   INTERNAL_SERVICE_ERROR_CODE,
-  UNAUTHORIZED_CODE,
   CONFLICT_CODE,
 } = require("../utils/errors");
 
@@ -54,9 +53,9 @@ const createUser = (req, res) => {
       if (err.name === "Duplicate Key Error") {
         return res
           .status(CONFLICT_CODE)
-          .send({ message: "Email already exists" });
+          .send({ message: "Duplicate Key Error" });
       }
-      if (err.name === "ValidationError") {
+      if (err.name === "Validation Error") {
         return res.status(BAD_REQUEST_CODE).send({ message: "Invalid data" });
       }
       return res
@@ -75,7 +74,7 @@ const getUser = (req, res) => {
       if (err.name === "DocumentNotFoundError") {
         return res.status(NOT_FOUND_CODE).send({ message: "Invalid data" });
       }
-      if (err.name === "CastError") {
+      if (err.name === "Cast Error") {
         return res.status(BAD_REQUEST_CODE).send({ message: "User not found" });
       }
       return res
@@ -96,9 +95,7 @@ const login = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      return res
-        .status(UNAUTHORIZED_CODE)
-        .send({ message: "Unauthorization Error" });
+      return res.status(BAD_REQUEST_CODE).send({ message: "Invalid data" });
     });
 };
 
