@@ -24,7 +24,7 @@ const getUsers = (req, res) => {
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
-  User.findOne({ email })
+  return User.findOne({ email })
     .then((user) => {
       if (user) {
         const error = new Error(
@@ -50,13 +50,13 @@ const createUser = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
+      if (err.name === "ValidationError") {
+        return res.status(BAD_REQUEST_CODE).send({ message: "Invalid data" });
+      }
       if (err.statusCode === CONFLICT_CODE) {
         return res
           .status(CONFLICT_CODE)
           .send({ message: "The user with the provided email already exists" });
-      }
-      if (err.name === "ValidationError") {
-        return res.status(BAD_REQUEST_CODE).send({ message: "Invalid data" });
       }
       return res
         .status(INTERNAL_SERVICE_ERROR_CODE)
