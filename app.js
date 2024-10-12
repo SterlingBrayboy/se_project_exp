@@ -1,9 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const routes = require("./routes/clothingItem");
+// const routes = require("./routes/clothingItem");
+const router = require("express").Router();
 const mainRouter = require("./routes/index");
-// const { auth } = require("../middlewares/auth");
 
 const app = express();
 app.use(express.json());
@@ -15,7 +15,7 @@ app.use(cors());
 
 // ROUTES
 
-app.use(routes);
+// app.use(routes);
 app.use("/", mainRouter);
 
 mongoose
@@ -30,7 +30,4 @@ mongoose
     console.error("Error connecting to the database", error);
   });
 
-module.exports.createClothingItem = (req) => {
-  const { owner } = req.user._id;
-  console.log(owner); // _id will become accessible
-};
+module.exports = router;

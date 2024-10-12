@@ -53,10 +53,9 @@ const deleteItem = (req, res) => {
       if (!item.owner.equals(req.user._id)) {
         return res.status(FORBIDDEN_CODE).send({ message: "Hands Off" });
       }
-      return ClothingItem.findByIdAndDelete(itemId);
-    })
-    .then((deletedItem) => {
-      res.status(200).send({ data: deletedItem });
+      return ClothingItem.findByIdAndDelete(itemId).then((deletedItem) => {
+        res.status(200).send({ data: deletedItem });
+      });
     })
     .catch(() => {
       res
@@ -85,7 +84,7 @@ const likeItem = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "CastError") {
-        return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
+        return res.status(BAD_REQUEST_CODE).send({ message: "Item not found" });
       }
       return res
         .status(INTERNAL_SERVICE_ERROR_CODE)
@@ -114,11 +113,11 @@ const unlikeItem = (req, res) => {
       res.status(200).send({ data: item });
     })
     .catch((err) => {
-      if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST_CODE)
-          .send({ message: "Invalid item ID" });
-      }
+      // if (err.name === "CastError") {
+      //   return res
+      //     .status(BAD_REQUEST_CODE)
+      //     .send({ message: "Invalid item ID" });
+      // }
       if (err.statusCode === NOT_FOUND_CODE) {
         return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
       }

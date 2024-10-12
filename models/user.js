@@ -32,25 +32,24 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     select: false,
-    validate: {
-      validator(str) {
-        return validator.isStrongPassword(str, {
-          minLength: 8,
-          minLowercase: 1,
-          minUppercase: 1,
-          minNumbers: 1,
-          minSymbols: 1,
-          returnScore: false,
-          pointsPerUnique: 1,
-          pointsPerRepeat: 0.5,
-          pointsForContainingLower: 10,
-          pointsForContainingUpper: 10,
-          pointsForContainingNumber: 10,
-          pointsForContainingSymbol: 10,
-        });
-      },
-      message: "Password is not strong enough",
-    },
+    // validate: {
+    //   validator(str) {
+    //     return validator.isStrongPassword(str, {
+    //       minLength: 8,
+    //       minLowercase: 1,
+    //       minUppercase: 1,
+    //       minNumbers: 1,
+    //       minSymbols: 1,
+    //       returnScore: false,
+    //       pointsPerUnique: 1,
+    //       pointsPerRepeat: 0.5,
+    //       pointsForContainingLower: 10,
+    //       pointsForContainingUpper: 10,
+    //       pointsForContainingNumber: 10,
+    //       pointsForContainingSymbol: 10,
+    //     });
+    //   },
+    message: "Password is not strong enough",
   },
 });
 
