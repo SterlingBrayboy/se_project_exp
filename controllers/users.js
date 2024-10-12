@@ -63,7 +63,7 @@ const login = (req, res) => {
       .send({ message: "The password and email fields are required" });
   }
 
-  User.findUserByCredentials(email, password)
+  return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
@@ -87,13 +87,12 @@ const getCurrentUser = (req, res) => {
   const userId = req.user._id;
 
   User.findById(userId)
-    .orFail(() => {
+    .orFail()
+    .then((user) => res.status(200).send(user))
+    .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
         return res.status(NOT_FOUND_CODE).send({ message: "User Not Found" });
       }
-    })
-    .then((user) => res.status(200).send(user))
-    .catch((err) => {
       if (err.name === "CastError") {
         return res.status(BAD_REQUEST_CODE).send({ message: "User Not Found" });
       }
