@@ -11,17 +11,6 @@ const {
   UNAUTHORIZED_CODE,
 } = require("../utils/errors");
 
-// const getUsers = (req, res) => {
-//   User.find({})
-//     .then((users) => res.status(200).send(users))
-//     .catch((err) => {
-//       console.error(err);
-//       return res
-//         .status(INTERNAL_SERVICE_ERROR_CODE)
-//         .send({ message: "Internal Service Error" });
-//     });
-// };
-
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
@@ -65,25 +54,6 @@ const createUser = (req, res) => {
     });
 };
 
-// const getUser = (req, res) => {
-//   const { userId } = req.params;
-//   User.findById(userId)
-//     .orFail()
-//     .then((user) => res.status(200).send(user))
-//     .catch((err) => {
-//       console.error(err);
-//       if (err.name === "DocumentNotFoundError") {
-//         return res.status(NOT_FOUND_CODE).send({ message: "Invalid data" });
-//       }
-//       if (err.name === "CastError") {
-//         return res.status(BAD_REQUEST_CODE).send({ message: "User not found" });
-//       }
-//       return res
-//         .status(INTERNAL_SERVICE_ERROR_CODE)
-//         .send({ message: "Internal Service Error" });
-//     });
-// };
-
 const login = (req, res) => {
   const { email, password } = req.body;
 
@@ -107,7 +77,6 @@ const login = (req, res) => {
           .status(UNAUTHORIZED_CODE)
           .send({ message: "Incorrect email or password" });
       }
-      // return res.status(BAD_REQUEST_CODE).send({ message: "Invalid data" });
       return res
         .status(INTERNAL_SERVICE_ERROR_CODE)
         .send({ message: "Internal Service Error" });
@@ -159,9 +128,7 @@ const updateProfile = (req, res) => {
 };
 
 module.exports = {
-  // getUsers,
   createUser,
-  // getUser,
   login,
   getCurrentUser,
   updateProfile,

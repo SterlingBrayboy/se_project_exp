@@ -73,7 +73,7 @@ const likeItem = (req, res) => {
 
   return ClothingItem.findByIdAndUpdate(
     itemId,
-    { $addToSet: { likes: req.user._id } }, // add _id to the array if it's not there yet
+    { $addToSet: { likes: req.user._id } },
     { new: true }
   )
     .then((item) => {
@@ -101,7 +101,7 @@ const unlikeItem = (req, res) => {
 
   return ClothingItem.findByIdAndUpdate(
     itemId,
-    { $pull: { likes: req.user._id } }, // remove _id from the array
+    { $pull: { likes: req.user._id } },
     { new: true }
   )
     .orFail(() => {
@@ -113,11 +113,6 @@ const unlikeItem = (req, res) => {
       res.status(200).send({ data: item });
     })
     .catch((err) => {
-      // if (err.name === "CastError") {
-      //   return res
-      //     .status(BAD_REQUEST_CODE)
-      //     .send({ message: "Invalid item ID" });
-      // }
       if (err.statusCode === NOT_FOUND_CODE) {
         return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
       }
