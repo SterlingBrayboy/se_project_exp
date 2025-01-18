@@ -9,6 +9,10 @@ const app = express();
 app.use(express.json());
 const { PORT = 3001 } = process.env;
 
+// ERRORS
+
+const { errors } = require("celebrate");
+
 // CORS
 
 app.use(cors());
