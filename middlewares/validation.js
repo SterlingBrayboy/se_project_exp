@@ -60,10 +60,13 @@ module.exports.validateInfoBody = celebrate({
 
 module.exports.validateUserAuth = celebrate({
   body: Joi.object().keys({
-    Id: Joi.string().required().custom(validateEmail).messages({
-      "string.empty": 'The "email" field must be filled in',
-      "string.uri": 'the "email" field must be a valid email',
-    }),
+    email: Joi.string()
+      .required()
+      .email()
+      .message('The "email" field must be a valid email')
+      .messages({
+        "string.required": 'The "email" field must be filled in',
+      }),
 
     password: Joi.string().required().messages({
       "string.empty": 'The "name" field must be filled in',
