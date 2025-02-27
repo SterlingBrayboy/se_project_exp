@@ -13,6 +13,14 @@ const { PORT = 3001 } = process.env;
 
 app.use(cors());
 
+// CRASH TEST
+
+app.get("/crash-test", () => {
+  setTimeout(() => {
+    throw new Error("Server will crash now");
+  }, 0);
+});
+
 // ERRORS
 
 const { requestLogger, errorLogger } = require("./middlewares/logger");
