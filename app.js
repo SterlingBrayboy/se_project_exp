@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const router = require("express").Router();
+const { errors } = require("celebrate");
 const mainRouter = require("./routes/index");
 
 const app = express();
@@ -25,7 +26,6 @@ app.get("/crash-test", () => {
 
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const { errorHandler } = require("./middlewares/errorHandler");
-const { errors } = require("celebrate");
 
 app.use("/", mainRouter);
 app.use(requestLogger);
@@ -36,7 +36,6 @@ app.use(errorHandler);
 mongoose
   .connect("mongodb://127.0.0.1:27017/wtwr_db")
   .then(() => {
-    console.log("Connected to DB");
     app.listen(PORT, () => {
       console.log(`App is listening at port ${PORT}`);
     });
