@@ -62,6 +62,17 @@ module.exports.validateInfoBody = celebrate({
   }),
 });
 
+module.exports.validateItemId = celebrate({
+  body: Joi.object().keys({
+    itemId: Joi.string().alphanum().length(24).required().messages({
+      "string.base": "The itemId must be a string.",
+      "string.alphanum": "The itemId must consist of alphanumeric characters.",
+      "string.length": "The itemId must be 24 characters long.",
+      "any.required": "The itemId is required.",
+    }),
+  }),
+});
+
 module.exports.validateUserAuth = celebrate({
   body: Joi.object().keys({
     email: Joi.string()
@@ -83,6 +94,11 @@ module.exports.validateUserId = celebrate({
     name: Joi.string().required().min(24).messages({
       "string.min": 'The minimum length of the "name" field is 24',
       "string.empty": 'The "name" field must be filled in',
+    }),
+
+    avatar: Joi.string().required().custom(validateURL).messages({
+      "string.empty": 'The "avatar" field must be filled in',
+      "string.uri": 'the "avatar" field must be a valid url',
     }),
   }),
 });

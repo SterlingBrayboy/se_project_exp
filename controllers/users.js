@@ -17,11 +17,9 @@ const createUser = (req, res, next) => {
   return User.findOne({ email })
     .then((user) => {
       if (user) {
-        const error = new Error(
+        throw new CONFLICT_CODE(
           "The user with the provided email already exists"
         );
-        error.statusCode = CONFLICT_CODE;
-        throw error;
       }
 
       return bcrypt.hash(password, 10).then((hash) =>
@@ -43,12 +41,13 @@ const createUser = (req, res, next) => {
       if (err.name === "ValidationError") {
         next(new BAD_REQUEST_CODE("Invalid data"));
       }
-      if (err.statusCode === CONFLICT_CODE) {
+      if (err.statusCode === 409) {
         next(
           new CONFLICT_CODE("The user with the provided email already exists")
         );
+      } else {
+        next(err);
       }
-      next(new INTERNAL_SERVICE_ERROR_CODE("Internal Service Error"));
     });
 };
 

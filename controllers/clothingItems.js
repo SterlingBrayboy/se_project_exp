@@ -42,10 +42,10 @@ const deleteItem = (req, res, next) => {
   return ClothingItem.findById(itemId)
     .then((item) => {
       if (!item) {
-        next(new NOT_FOUND_CODE("Item not found"));
+        return next(new NOT_FOUND_CODE("Item not found"));
       }
       if (!item.owner.equals(req.user._id)) {
-        next(new FORBIDDEN_CODE("Hands Off"));
+        return next(new FORBIDDEN_CODE("Hands Off"));
       }
       return ClothingItem.findByIdAndDelete(itemId).then((deletedItem) => {
         res.status(200).send({ data: deletedItem });

@@ -10,4 +10,4 @@ This is a back-end server designed for the WTWR application, featuring a robust 
 
 ## Visit
 
-https://wtwr.silksky.com/
+https://api.wtwr.silksky.com/
