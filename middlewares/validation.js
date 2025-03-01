@@ -63,7 +63,7 @@ module.exports.validateInfoBody = celebrate({
 });
 
 module.exports.validateItemId = celebrate({
-  body: Joi.object().keys({
+  params: Joi.object().keys({
     itemId: Joi.string().alphanum().length(24).required().messages({
       "string.base": "The itemId must be a string.",
       "string.alphanum": "The itemId must consist of alphanumeric characters.",
@@ -91,8 +91,9 @@ module.exports.validateUserAuth = celebrate({
 
 module.exports.validateUserId = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().required().min(24).messages({
-      "string.min": 'The minimum length of the "name" field is 24',
+    name: Joi.string().required().min(2).max(30).messages({
+      "string.min": 'The minimum length of the "name" field is 2',
+      "string.max": 'The maximum length of the "name" field is 30',
       "string.empty": 'The "name" field must be filled in',
     }),
 
