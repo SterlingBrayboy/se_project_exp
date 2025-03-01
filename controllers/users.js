@@ -3,15 +3,15 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const { JWT_SECRET } = require("../utils/config");
 
+const { BAD_REQUEST_CODE } = require("../utils/errors/bad-request-err");
+const { NOT_FOUND_CODE } = require("../utils/errors/not-found-err");
 const {
-  BAD_REQUEST_CODE,
-  NOT_FOUND_CODE,
   INTERNAL_SERVICE_ERROR_CODE,
-  CONFLICT_CODE,
-  UNAUTHORIZED_CODE,
-} = require("../utils/errors");
+} = require("../utils/errors/internal-service-err");
+const { CONFLICT_CODE } = require("../utils/errors/conflict-err");
+const { UNAUTHORIZED_CODE } = require("../utils/errors/unauthorized-err");
 
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
 
   return User.findOne({ email })
@@ -52,7 +52,7 @@ const createUser = (req, res) => {
     });
 };
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -75,7 +75,7 @@ const login = (req, res) => {
     });
 };
 
-const getCurrentUser = (req, res) => {
+const getCurrentUser = (req, res, next) => {
   const userId = req.user._id;
 
   User.findById(userId)
@@ -92,7 +92,7 @@ const getCurrentUser = (req, res) => {
     });
 };
 
-const updateProfile = (req, res) => {
+const updateProfile = (req, res, next) => {
   const { name, avatar } = req.body;
 
   return User.findByIdAndUpdate(

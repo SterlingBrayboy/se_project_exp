@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 const ClothingItem = require("../models/clothingItem");
 
+const { BAD_REQUEST_CODE } = require("../utils/errors/bad-request-err");
+const { NOT_FOUND_CODE } = require("../utils/errors/not-found-err");
 const {
-  BAD_REQUEST_CODE,
-  NOT_FOUND_CODE,
   INTERNAL_SERVICE_ERROR_CODE,
-  FORBIDDEN_CODE,
-} = require("../utils/errors");
+} = require("../utils/errors/internal-service-err");
+const { FORBIDDEN_CODE } = require("../utils/errors/forbidden-err");
 
-const createItem = (req, res) => {
+const createItem = (req, res, next) => {
   const { name, weather, imageUrl } = req.body;
   const owner = req.user._id;
 
@@ -24,7 +24,7 @@ const createItem = (req, res) => {
     });
 };
 
-const getItems = (req, res) => {
+const getItems = (req, res, next) => {
   ClothingItem.find({})
     .then((items) => res.status(200).send(items))
     .catch(() => {
@@ -32,7 +32,7 @@ const getItems = (req, res) => {
     });
 };
 
-const deleteItem = (req, res) => {
+const deleteItem = (req, res, next) => {
   const { itemId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
@@ -56,7 +56,7 @@ const deleteItem = (req, res) => {
     });
 };
 
-const likeItem = (req, res) => {
+const likeItem = (req, res, next) => {
   const { itemId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
@@ -82,7 +82,7 @@ const likeItem = (req, res) => {
     });
 };
 
-const unlikeItem = (req, res) => {
+const unlikeItem = (req, res, next) => {
   const { itemId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
