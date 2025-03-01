@@ -33,7 +33,7 @@ module.exports.validateCardBody = celebrate({
     }),
 
     weather: Joi.string().valid("hot", "warm", "cold").required().messages({
-      "button.required": "The weather field must be filled in",
+      "any.required": "The weather field must be filled in",
     }),
   }),
 });

@@ -27,8 +27,8 @@ app.get("/crash-test", () => {
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const { errorHandler } = require("./middlewares/errorHandler");
 
-app.use("/", mainRouter);
 app.use(requestLogger);
+app.use("/", mainRouter);
 app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);

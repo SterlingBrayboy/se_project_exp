@@ -41,16 +41,14 @@ const createUser = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {
-        return res.status(BAD_REQUEST_CODE).send({ message: "Invalid data" });
+        next(new BAD_REQUEST_CODE("Invalid data"));
       }
       if (err.statusCode === CONFLICT_CODE) {
-        return res
-          .status(CONFLICT_CODE)
-          .send({ message: "The user with the provided email already exists" });
+        next(
+          new CONFLICT_CODE("The user with the provided email already exists")
+        );
       }
-      return res
-        .status(INTERNAL_SERVICE_ERROR_CODE)
-        .send({ message: "Internal Service Error" });
+      next(new INTERNAL_SERVICE_ERROR_CODE("Internal Service Error"));
     });
 };
 
@@ -58,9 +56,7 @@ const login = (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res
-      .status(BAD_REQUEST_CODE)
-      .send({ message: "The password and email fields are required" });
+    next(new BAD_REQUEST_CODE("The password and email fields are required"));
   }
 
   return User.findUserByCredentials(email, password)
@@ -73,13 +69,9 @@ const login = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.message === "Incorrect email or password") {
-        return res
-          .status(UNAUTHORIZED_CODE)
-          .send({ message: "Incorrect email or password" });
+        next(new UNAUTHORIZED_CODE("Incorrect email or password"));
       }
-      return res
-        .status(INTERNAL_SERVICE_ERROR_CODE)
-        .send({ message: "Internal Service Error" });
+      next(new INTERNAL_SERVICE_ERROR_CODE("Internal Service Error"));
     });
 };
 
@@ -91,14 +83,12 @@ const getCurrentUser = (req, res) => {
     .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND_CODE).send({ message: "User Not Found" });
+        next(new NOT_FOUND_CODE("User Not Found"));
       }
       if (err.name === "CastError") {
-        return res.status(BAD_REQUEST_CODE).send({ message: "User Not Found" });
+        next(new BAD_REQUEST_CODE("User Not Found"));
       }
-      return res
-        .status(INTERNAL_SERVICE_ERROR_CODE)
-        .send({ message: "Internal Service Error" });
+      next(new INTERNAL_SERVICE_ERROR_CODE("Internal Service Error"));
     });
 };
 
@@ -112,17 +102,15 @@ const updateProfile = (req, res) => {
   )
     .then((updatedUser) => {
       if (!updatedUser) {
-        return res.status(NOT_FOUND_CODE).send({ message: "User Not Found" });
+        next(new NOT_FOUND_CODE("User Not Found"));
       }
       return res.send(updatedUser);
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res.status(BAD_REQUEST_CODE).send({ message: "Invalid data" });
+        next(new BAD_REQUEST_CODE("Invalid data"));
       }
-      return res
-        .status(INTERNAL_SERVICE_ERROR_CODE)
-        .send({ message: "Internal Service Error" });
+      next(new INTERNAL_SERVICE_ERROR_CODE("Internal Service Error"));
     });
 };
 

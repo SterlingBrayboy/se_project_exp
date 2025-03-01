@@ -11,7 +11,6 @@ const errorHandler = (err, req, res, next) => {
       ? "An error has occurred on the server."
       : err.message;
   res.status(statusCode).send({ message });
-  next();
 };
 
 module.exports = { errorHandler };

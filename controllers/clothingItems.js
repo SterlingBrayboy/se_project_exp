@@ -18,13 +18,9 @@ const createItem = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        return res
-          .status(BAD_REQUEST_CODE)
-          .send({ message: "Error from createItem" });
+        next(new BAD_REQUEST_CODE("Invalid data"));
       }
-      return res
-        .status(INTERNAL_SERVICE_ERROR_CODE)
-        .send({ message: "Internal server error" });
+      next(new INTERNAL_SERVICE_ERROR_CODE("Internal server error"));
     });
 };
 
@@ -32,9 +28,7 @@ const getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.status(200).send(items))
     .catch(() => {
-      res
-        .status(INTERNAL_SERVICE_ERROR_CODE)
-        .send({ message: "Error from getItems" });
+      next(new INTERNAL_SERVICE_ERROR_CODE("Error from getItems"));
     });
 };
 
@@ -42,25 +36,23 @@ const deleteItem = (req, res) => {
   const { itemId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
-    return res.status(BAD_REQUEST_CODE).send({ message: "Invalid ID format" });
+    next(new BAD_REQUEST_CODE("Invalid ID format"));
   }
 
   return ClothingItem.findById(itemId)
     .then((item) => {
       if (!item) {
-        return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
+        next(new NOT_FOUND_CODE("Item not found"));
       }
       if (!item.owner.equals(req.user._id)) {
-        return res.status(FORBIDDEN_CODE).send({ message: "Hands Off" });
+        next(new FORBIDDEN_CODE("Hands Off"));
       }
       return ClothingItem.findByIdAndDelete(itemId).then((deletedItem) => {
         res.status(200).send({ data: deletedItem });
       });
     })
     .catch(() => {
-      res
-        .status(INTERNAL_SERVICE_ERROR_CODE)
-        .send({ message: "Error from deleteItem" });
+      next(new INTERNAL_SERVICE_ERROR_CODE("Error from deleteItem"));
     });
 };
 
@@ -68,7 +60,7 @@ const likeItem = (req, res) => {
   const { itemId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
-    return res.status(BAD_REQUEST_CODE).send({ message: "Invalid ID format" });
+    next(new BAD_REQUEST_CODE("Invalid ID format"));
   }
 
   return ClothingItem.findByIdAndUpdate(
@@ -78,17 +70,15 @@ const likeItem = (req, res) => {
   )
     .then((item) => {
       if (!item) {
-        return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
+        next(new NOT_FOUND_CODE("Item not found"));
       }
       return res.status(200).send({ data: item });
     })
     .catch((err) => {
       if (err.name === "CastError") {
-        return res.status(BAD_REQUEST_CODE).send({ message: "Item not found" });
+        next(new BAD_REQUEST_CODE("Item not found"));
       }
-      return res
-        .status(INTERNAL_SERVICE_ERROR_CODE)
-        .send({ message: "Internal server error" });
+      next(new INTERNAL_SERVICE_ERROR_CODE("Internal server error"));
     });
 };
 
@@ -96,7 +86,7 @@ const unlikeItem = (req, res) => {
   const { itemId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
-    return res.status(BAD_REQUEST_CODE).send({ message: "Invalid ID format" });
+    next(new BAD_REQUEST_CODE("Invalid ID format"));
   }
 
   return ClothingItem.findByIdAndUpdate(
@@ -114,11 +104,9 @@ const unlikeItem = (req, res) => {
     })
     .catch((err) => {
       if (err.statusCode === NOT_FOUND_CODE) {
-        return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
+        next(new NOT_FOUND_CODE("Item not found"));
       }
-      return res
-        .status(INTERNAL_SERVICE_ERROR_CODE)
-        .send({ message: "Internal server error" });
+      next(new INTERNAL_SERVICE_ERROR_CODE("Internal server error"));
     });
 };
 
